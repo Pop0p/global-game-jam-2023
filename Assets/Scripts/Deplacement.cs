@@ -10,11 +10,14 @@ public class Deplacement : MonoBehaviour
     private bool canDash;
     private bool canUse;
 
+    private Rigidbody rb;
+
     // Start is called before the first frame update
     void Start()
     {
         movement = Vector2.zero;
         canUse = true;
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -24,9 +27,8 @@ public class Deplacement : MonoBehaviour
 
         if (canDash && canUse)
         {
-            transform.Translate(new Vector3(movement.x, 0, movement.y) * Time.deltaTime * Speed * 3);
-            canDash = false;
-            canUse = false;
+            StartCoroutine(DashAction());
+            transform.Translate(new Vector3(movement.x, 0, movement.y) * Time.deltaTime * Speed * 2);
             StartCoroutine(CooldownDash());
             Debug.Log("dash");
         }
@@ -46,5 +48,12 @@ public class Deplacement : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         canUse = true;
+    }
+
+    private IEnumerator DashAction()
+    {
+        canDash = true;
+        yield return new WaitForSeconds(0.7f);
+        canUse = false;
     }
 }
