@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 public class Deplacement : MonoBehaviour
 {
-    public int Speed;
-    public int DashSpeed;
+    public float Speed;
+    public float DashSpeed;
     public float DashCooldown;
     public float DashDuration;
 
