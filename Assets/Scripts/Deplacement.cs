@@ -13,6 +13,7 @@ public class Deplacement : MonoBehaviour
     private Vector2 movement;
     private bool canDash;
     private bool canUse;
+    public bool IsDashing;
 
     private Rigidbody rb;
 
@@ -22,6 +23,7 @@ public class Deplacement : MonoBehaviour
         movement = Vector2.zero;
         canUse = true;
         rb = GetComponent<Rigidbody>();
+        IsDashing = false;
     }
 
     // Update is called once per frame
@@ -32,10 +34,10 @@ public class Deplacement : MonoBehaviour
         if (canDash && canUse)
         {
             rb.AddForce(new Vector3(movement.x, 0, movement.y) * DashSpeed, ForceMode.Impulse);
-
             canUse = false;
+
+            StartCoroutine(UseDash());
             StartCoroutine(CooldownDash());
-            Debug.Log("dash");
         }
     }
 
@@ -47,11 +49,18 @@ public class Deplacement : MonoBehaviour
     public void Dash(InputAction.CallbackContext context)
     {
         canDash = context.action.triggered;
+        IsDashing = true;
     }
 
     private IEnumerator CooldownDash()
     {
         yield return new WaitForSeconds(DashCooldown);
         canUse = true;
+    }
+
+    private IEnumerator UseDash()
+    {
+        yield return new WaitForSeconds(DashDuration);
+        IsDashing = false;
     }
 }
