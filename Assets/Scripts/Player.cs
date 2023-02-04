@@ -15,11 +15,13 @@ public class Player : MonoBehaviour
 
     private int nb_object;
     public TMP_Text TextObject;
-    public string DebutTextObject;
     public GameObject LifesObject;
     public ParticleSystem DieEffect;
 
     private MeshRenderer mesh;
+
+    public GameObject Tuto;
+    private bool first;
 
     // Start is called before the first frame update
     void Start()
@@ -28,11 +30,18 @@ public class Player : MonoBehaviour
         mesh = GetComponent<MeshRenderer>();
         invisibilityDash = false;
         invisibilityTouch = false;
+        first = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (first && Input.anyKey)
+        {
+            Tuto.SetActive(false);
+            AudioManager.Instance.ChangeSound("begin");
+        }
+
         invisibilityDash = deplacement.IsDashing;
         if (invisibilityDash || invisibilityTouch)
         {
@@ -51,7 +60,13 @@ public class Player : MonoBehaviour
         {
             collision.gameObject.SetActive(false);
             nb_object++;
-            TextObject.text = DebutTextObject + " " + nb_object;
+            TextObject.text = nb_object.ToString();
+            AudioManager.Instance.ChangeSound("flower " + nb_object);
+            if (nb_object == 6)
+            {
+                AudioManager.Instance.ChangeSound("victory");
+                // Fin de la partie
+            }
         }
         // retirer pv si racine
         if ((collision.gameObject.tag == "Roots") && !invisibilityDash)
@@ -71,9 +86,12 @@ public class Player : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             nb_object++;
-            TextObject.text = DebutTextObject + " " + nb_object;
+            TextObject.text = nb_object.ToString();
+
+            AudioManager.Instance.ChangeSound("flower " + nb_object);
             if (nb_object == 6)
             {
+                AudioManager.Instance.ChangeSound("victory");
                 // Fin de la partie
             }
         }

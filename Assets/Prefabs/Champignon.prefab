@@ -171,7 +171,6 @@ MonoBehaviour:
   InvinsibiliteTouchCooldown: 0
   Collider_player: {fileID: 90153509422240261}
   TextObject: {fileID: 0}
-  DebutTextObject: 
   LifesObject: {fileID: 3848398724200028062}
   DieEffect: {fileID: 3863506748262994238, guid: e935ed65177da914aa0d29bad96565ec, type: 3}
 --- !u!54 &90153509422240258
@@ -247,6 +246,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9687737e-5dbf-47d1-94bd-604350373c2d
     m_ActionName: Player/Dash[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 723842105082792122}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 93046887-91c6-4a97-9e16-4fb9d533b36b
+    m_ActionName: Player/Bye Tuto[/Keyboard/anyKey]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Player
