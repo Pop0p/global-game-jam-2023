@@ -36,10 +36,10 @@ public class Root : MonoBehaviour
         {
             StartCoroutine(DoGrow());
         }
-        if (_shrinkTryTime >= 3)
+        if (_shrinkTryTime >= 8)
         {
             _shrinkTryTime = 0;
-            if (_hasGrown && Random.Range(0f, 1f) <= 0.15f && _time >= ApparitionTime)
+            if (_hasGrown && Random.Range(0f, 1f) <= 0.25f && _time >= ApparitionTime)
                 StartCoroutine(DoShrink());
         }
 
