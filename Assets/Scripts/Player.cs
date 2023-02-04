@@ -19,10 +19,13 @@ public class Player : MonoBehaviour
     public GameObject LifesObject;
     public ParticleSystem DieEffect;
 
+    private MeshRenderer mesh;
+
     // Start is called before the first frame update
     void Start()
     {
         deplacement = GetComponent<Deplacement>();
+        mesh = GetComponent<MeshRenderer>();
         invisibilityDash = false;
         invisibilityTouch = false;
     }
@@ -55,7 +58,8 @@ public class Player : MonoBehaviour
         {
             deplacement.Back();
             invisibilityTouch = true;
-            StartCoroutine(InvinsibiliteCooldown());
+
+            StartCoroutine(Clignote());
             LostPV(1);
         }
     }
@@ -68,6 +72,10 @@ public class Player : MonoBehaviour
             other.gameObject.SetActive(false);
             nb_object++;
             TextObject.text = DebutTextObject + " " + nb_object;
+            if (nb_object == 6)
+            {
+                // Fin de la partie
+            }
         }
     }
 
@@ -85,9 +93,20 @@ public class Player : MonoBehaviour
         }
     }
 
-    private IEnumerator InvinsibiliteCooldown()
+    private IEnumerator Clignote()
     {
-        yield return new WaitForSeconds(InvinsibiliteTouchCooldown);
+        mesh.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        mesh.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        mesh.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        mesh.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        mesh.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        mesh.enabled = true;
+
         invisibilityTouch = false;
     }
 }
