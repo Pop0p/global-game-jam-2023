@@ -58,7 +58,8 @@ public class Player : MonoBehaviour
         {
             deplacement.Back();
             invisibilityTouch = true;
-            StartCoroutine(InvinsibiliteCooldown());
+
+            StartCoroutine(Clignote());
             LostPV(1);
         }
     }
@@ -88,13 +89,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    private IEnumerator InvinsibiliteCooldown()
-    {
-        StartCoroutine(Clignote());
-        yield return new WaitForSeconds(InvinsibiliteTouchCooldown);
-        invisibilityTouch = false;
-    }
-
     private IEnumerator Clignote()
     {
         mesh.enabled = false;
@@ -108,13 +102,7 @@ public class Player : MonoBehaviour
         mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
         mesh.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        mesh.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        mesh.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+
+        invisibilityTouch = false;
     }
 }
