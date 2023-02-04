@@ -62,5 +62,6 @@ public class Deplacement : MonoBehaviour
     {
         yield return new WaitForSeconds(DashDuration);
         IsDashing = false;
+        rb.velocity = Vector3.zero;
     }
 }

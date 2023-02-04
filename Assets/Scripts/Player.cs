@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public int PV;
     private Deplacement deplacement;
     private bool invisibility;
+    public Collider Collider_player;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,14 @@ public class Player : MonoBehaviour
     void Update()
     {
         invisibility = deplacement.IsDashing;
+        if (invisibility)
+        {
+            Collider_player.isTrigger = true;
+        }
+        else
+        {
+            Collider_player.isTrigger = false;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
