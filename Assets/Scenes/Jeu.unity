@@ -152,7 +152,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f72d161c6f3d8bc4aa97a622b41e34da, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.179
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1116,7 +1116,6 @@ RectTransform:
   - {fileID: 67161050}
   - {fileID: 1361433716}
   - {fileID: 136035692}
-  - {fileID: 1989409329}
   m_Father: {fileID: 676999698}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1462,6 +1461,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shakeDuration: 0
   shakeAmount: 0.025
+--- !u!114 &1857573482 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 90153509422240259, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+  m_PrefabInstance: {fileID: 4584935590884322696}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3203f7127852be247be81d4e4f77c739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1932730509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1626,9 +1636,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec67e12c5a471f43a436dbb6fa0140f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioSources: []
-  Musics: []
-  Voices: []
+  AudioSources:
+  - {fileID: 20260275}
+  - {fileID: 1989409330}
+  Musics:
+  - {fileID: 8300000, guid: c5dfe9c9a0a0b97418305cb8fa4355c0, type: 3}
+  - {fileID: 8300000, guid: 71eb05c3b943cff42a792e8461dfb2c6, type: 3}
+  - {fileID: 8300000, guid: 4eaa3e6b82a6a4a47a8a31b6b7f0adac, type: 3}
+  Voices:
+  - {fileID: 8300000, guid: 39ed9d0253f8a534181f7b0395fcf15d, type: 3}
+  - {fileID: 8300000, guid: 55cbf77b93409334a9973b3562d421f2, type: 3}
+  - {fileID: 8300000, guid: 341b0cbc2c34e3347bc0942ee52009fa, type: 3}
+  - {fileID: 8300000, guid: 4de0ee4ee2f92dd409af5ac863192804, type: 3}
 --- !u!4 &1986814005
 Transform:
   m_ObjectHideFlags: 0
@@ -1642,7 +1661,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1989409328
 GameObject:
@@ -1655,7 +1674,7 @@ GameObject:
   - component: {fileID: 1989409329}
   - component: {fileID: 1989409330}
   m_Layer: 5
-  m_Name: AudioTuto
+  m_Name: Audio Music
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1668,17 +1687,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989409328}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1041630260}
-  m_RootOrder: 4
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 960, y: 254}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &1989409330
@@ -2196,6 +2215,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 90153509422240257, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 90153509422240257, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1857573482}
+    - target: {fileID: 90153509422240257, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ByeTuto
+      objectReference: {fileID: 0}
+    - target: {fileID: 90153509422240257, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Player, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 90153509422240257, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 90153509422240259, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
+      propertyPath: Tuto
+      value: 
+      objectReference: {fileID: 1041630259}
     - target: {fileID: 90153509422240259, guid: 3d3a636d8a10b2d45be79ddfc0c8e381, type: 3}
       propertyPath: TextObject
       value: 

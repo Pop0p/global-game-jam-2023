@@ -47,7 +47,7 @@ public class AudioManager : MonoBehaviour
             case "flower 5":
                 AudioSources[0].clip = Voices[4];
                 break;
-            case "victory": // victory
+            case "victory":
                 AudioSources[1].clip = Musics[1];
                 break;
             case "death":
