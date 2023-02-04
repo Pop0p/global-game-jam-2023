@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -8,6 +10,10 @@ public class Player : MonoBehaviour
     private Deplacement deplacement;
     private bool invisibility;
     public Collider Collider_player;
+
+    private int nb_object;
+    public TMP_Text TextObject;
+    public string DebutTextObject;
 
     // Start is called before the first frame update
     void Start()
@@ -32,10 +38,28 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // si objet alors ramasser
+        if (collision.gameObject.tag == "Object")
+        {
+            collision.gameObject.SetActive(false);
+            nb_object++;
+            TextObject.text = DebutTextObject + " " + nb_object;
+        }
         // retirer pv si racine
-        if (!invisibility)
+        if ((collision.gameObject.tag == "Roots") && !invisibility)
         {
             LostPV(1);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // si objet alors ramasser
+        if (other.gameObject.tag == "Object")
+        {
+            other.gameObject.SetActive(false);
+            nb_object++;
+            TextObject.text = DebutTextObject + " " + nb_object;
         }
     }
 
