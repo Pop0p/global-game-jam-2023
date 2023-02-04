@@ -16,18 +16,20 @@ public class Root : MonoBehaviour
 
     public bool IsPaused = true;
     public float ApparitionTime = 0;
+    public float ShrinkTime = 1f;
 
+    private float _timeSinceGrown = 0f;
     private bool _hasGrown = false;
     private float _time;
-    private float _shrinkTryTime;
 
+    public Cell Associated_cell;
 
     private void OnEnable()
     {
         IsPaused = true;
-        var xzscale = Random.Range(0.20f, 0.80f);
-        transform.localScale = new Vector3(xzscale, Random.Range(1f, 3f), xzscale);
-        _growthDuration = Random.Range(1f, 2f);
+        _timeSinceGrown = 0;
+        _time = 0;
+        _growthDuration = .25f;
     }
 
     void Update()
@@ -36,15 +38,14 @@ public class Root : MonoBehaviour
         {
             StartCoroutine(DoGrow());
         }
-        if (_shrinkTryTime >= 8)
+        if (!_isLerping && _hasGrown && _timeSinceGrown >= ShrinkTime)
         {
-            _shrinkTryTime = 0;
-            if (_hasGrown && Random.Range(0f, 1f) <= 0.25f && _time >= ApparitionTime)
-                StartCoroutine(DoShrink());
+            StartCoroutine(DoShrink());
         }
 
         _time += Time.deltaTime;
-        _shrinkTryTime += Time.deltaTime;
+        if (_hasGrown)
+            _timeSinceGrown += Time.deltaTime;
     }
 
 
@@ -102,6 +103,7 @@ public class Root : MonoBehaviour
 
         _isLerping = false;
         _hasGrown = false;
+        Associated_cell.HasRoot = false;
         gameObject.SetActive(false);
         yield break;
     }

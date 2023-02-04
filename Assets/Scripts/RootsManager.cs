@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -10,121 +11,67 @@ public class RootsManager : MonoBehaviour
     [SerializeField] private GameObject _rootPrefab;
     [SerializeField] private float _spawnMinDelay;
     [SerializeField] private float _spawnMaxDelay;
-
-
     [SerializeField] private MeshRenderer _ground;
 
-    private float _spawnMaxCount = 1;
     private float _spawnTime;
     private List<GameObject> _rootsPool;
+    public Cell[,] _cells;
 
-    private float _currentTime;
 
-    private List<Vector3> _usedPositions;
 
 
     private void Awake()
     {
         Assert.IsNotNull(_rootPrefab, "the field _rootPrefab shouldn't be null !");
-        Assert.IsTrue(_ground.transform.position.Equals(Vector3.zero), "the ground should be at position 0");
 
         _rootsPool = new List<GameObject>();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             var obj = Instantiate(_rootPrefab);
             obj.transform.parent = transform;
             _rootsPool.Add(obj);
         }
 
-        _usedPositions = new List<Vector3>();
         _spawnTime = GetNewSpawnTime();
 
+        var width = _ground.bounds.size.x;
+        var length = _ground.bounds.size.z;
 
 
+        var cell_count = 11; // atm the root diameter is 0.45 and the ground width is 5 so... 5 / 0.45 == 11
+        var cell_row_width = width / cell_count;
+        var cell_row_length = length / cell_count;
+
+        _cells = new Cell[cell_count, cell_count];
+
+        var start_position_x = width / -2 + cell_row_width / 2;
+        var start_position_z = length / 2 - cell_row_length / 2;
+
+        for (int x = 0; x < cell_count; x++)
+        {
+            var cell_x = start_position_x + (cell_row_width) * x;
+            for (int z = 0; z < cell_count; z++)
+            {
+                var cell_z = start_position_z - (cell_row_length) * z;
+                _cells[x, z] = new Cell(new Vector3(cell_x, -1.6f, cell_z));
+            }
+        }
     }
     // Update is called once per frame
     void Update()
     {
+
         if (_spawnTime < 0)
         {
-            SpawnRoot();
-
+            DoAttack();
             _spawnTime = GetNewSpawnTime();
         }
 
         _spawnTime -= Time.deltaTime;
-        _currentTime += Time.deltaTime;
-
-        if (_currentTime >= 10 && _spawnMaxCount < 2)
-            _spawnMaxCount = 2;
-        else if (_currentTime >= 25 && _spawnMaxCount < 3)
-            _spawnMaxCount = 3;
-        else if (_currentTime >= 45 && _spawnMaxCount < 5)
-            _spawnMaxCount = 5;
-
     }
 
-    void SpawnRoot()
-    {
-        List<GameObject> spawning = new();
-        for (var i = 0; i < Random.Range(1, _spawnMaxCount); i++)
-        {
-            Vector3 target_position = GetPosition();
-
-            // If the position is already used simply don't spawn the root... (maybe try another position.. ? )
-            if (!isPositionFree(target_position))
-            {
-                continue;
-            }
-
-            _usedPositions.Add(target_position);
-            GameObject new_root = GetFromPool();
-            new_root.transform.position = target_position;
-            new_root.SetActive(true);
-            spawning.Add(new_root);
-        }
-
-
-        if (spawning.Count <= 0)
-            return;
-
-        var action = Random.Range(0, 1);
-        var wait_before_activate_time = Random.Range(.75f, 1.25f);
-        if (action <= 0.5) // Same time.
-        {
-            foreach (GameObject item in spawning)
-            {
-                var root = item.GetComponent<Root>();
-                root.ApparitionTime = wait_before_activate_time;
-            }
-
-        }
-        else if (action <= 1)
-        {
-            var interval = Random.Range(0.15f, .4f);
-            for (int i = 0; i < spawning.Count; i++)
-            {
-                var root = spawning[i].GetComponent<Root>();
-                root.ApparitionTime = wait_before_activate_time + (i * interval);
-            }
-        }
-
-    }
 
     float GetNewSpawnTime() => Random.Range(_spawnMinDelay, _spawnMaxDelay);
-
-    Vector3 GetPosition()
-    {
-        var size = _ground.bounds.size / 2;
-
-        // -3.5f because atm the root height is 3 so i just add 0.5.
-        var position = new Vector3(Random.Range(-size.x + 0.25f, size.x - 0.25f), -3.5f, Random.Range(-size.z + 0.25f, size.z - 0.25f));
-
-        return position;
-    }
-    bool isPositionFree(Vector3 pos) => !_usedPositions.Any(up => Vector3.Distance(up, pos) <= .5f);
-
-
 
     GameObject GetFromPool()
     {
@@ -140,4 +87,162 @@ public class RootsManager : MonoBehaviour
 
         return obj;
     }
+
+    void DoAttack()
+    {
+        var r = Random.Range(0f, 1f);
+        // Full 5%
+        if (r <= 0.05 && (from Cell cell in _cells where cell.HasRoot select cell).Count() < 4)
+        {
+            SpawnFull();
+        }
+        // Square 20%
+        else if (r <= 0.25)
+        {
+            SpawnSquare();
+        }
+        // Line 25 %
+        else if (r <= 0.50)
+        {
+            SpawnLine();
+        }
+        // cross 20 %
+        else if (r <= 0.70)
+        {
+            SpawnCross();
+
+        }
+        // grid 10 %
+        else if (r <= 0.80)
+        {
+            SpawnMultipleRandoms();
+        }
+        // Simple 20 %
+        else
+        {
+            SpawnSimple();
+        }
+    }
+
+
+    private void SpawnSquare()
+    {
+        var cells = new List<Cell>();
+        var size = Random.Range(2, 5);
+        var center_x = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(0) - Mathf.FloorToInt(size / 2));
+        var center_z = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(1) - Mathf.FloorToInt(size / 2));
+        for (int x = 0; x < size; x++)
+        {
+            var x_index = Mathf.FloorToInt(center_x - size / 2) + x;
+            for (int z = 0; z < size; z++)
+            {
+                var z_index = Mathf.FloorToInt(center_z - size / 2) + z;
+                cells.Add(_cells[x_index, z_index]);
+            }
+        }
+    }
+
+    private void SpawnLine()
+    {
+        var center_x = Random.Range(0, _cells.GetLength(0));
+        var center_z = Random.Range(0, _cells.GetLength(1));
+        bool is_vertical = Random.Range(0, 2) == 0;
+
+        if (is_vertical)
+        {
+            for (int x = 0; x < _cells.GetLength(0); x++)
+                DoSpawnRoot(_cells[x, center_z], 0.25f + (0.05f * x));
+        }
+        else
+        {
+            for (int z = 0; z < _cells.GetLength(1); z++)
+                DoSpawnRoot(_cells[center_x, z], 0.25f + (0.05f * z));
+        }
+    }
+    private void SpawnMultipleRandoms()
+    {
+        bool with_different_delay = Random.Range(0, 2) == 0;
+        for (int x = 0; x < _cells.GetLength(0); x++)
+        {
+            for (int z = 0; z < _cells.GetLength(1); z++)
+            {
+                if (Random.Range(0, 4) == 0)
+                    DoSpawnRoot(_cells[x, z], with_different_delay ? Random.Range(0.1f, 035f) : 0.15f);
+            }
+        }
+    }
+    private void SpawnSimple()
+    {
+        var center_x = Random.Range(0, _cells.GetLength(0));
+        var center_z = Random.Range(0, _cells.GetLength(1));
+
+        DoSpawnRoot(_cells[center_x, center_z], Random.Range(0.25f, 0.50f));
+    }
+    private void SpawnCross()
+    {
+        var center_x = Mathf.FloorToInt(_cells.GetLength(0) / 2);
+        var center_z = Mathf.FloorToInt(_cells.GetLength(1) / 2);
+
+        DoSpawnRoot(_cells[center_x, center_z], 0.20f);
+
+        //right
+        for (int x = center_x + 1; x < _cells.GetLength(0); x++)
+            DoSpawnRoot(_cells[x, center_z], 0.25f + (0.15f * Mathf.Abs(center_x - x)));
+        //// left
+        for (int x = center_x - 1; x >= 0; x--)
+            DoSpawnRoot(_cells[x, center_z], 0.25f + (0.15f * (center_x - x))); ;
+
+
+        ////// bottom
+        for (int z = center_z + 1; z < _cells.GetLength(1); z++)
+            DoSpawnRoot(_cells[center_x, z], 0.25f + (0.15f * Mathf.Abs(center_z - z)));
+        // Top
+        for (int z = center_z - 1; z >= 0; z--)
+            DoSpawnRoot(_cells[center_x, z], 0.25f + (0.15f * (center_z - z)));
+
+
+    }
+    private void SpawnFull()
+    {
+        var safes = new List<Cell>();
+        var size = Random.Range(2, 4);
+        var center_x = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(0) - Mathf.FloorToInt(size / 2));
+        var center_z = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(1) - Mathf.FloorToInt(size / 2));
+
+        for (int x = 0; x < size; x++)
+        {
+            var x_index = Mathf.FloorToInt(center_x - size / 2) + x;
+            for (int z = 0; z < size; z++)
+            {
+                var z_index = Mathf.FloorToInt(center_z - size / 2) + z;
+                safes.Add(_cells[x_index, z_index]);
+            }
+        }
+
+        var delay = Random.Range(0.25f, 0.50f);
+        foreach (Cell c in _cells)
+        {
+            if (safes.Contains(c))
+                continue;
+
+            DoSpawnRoot(c, delay);
+        }
+
+    }
+
+
+
+    private void DoSpawnRoot(Cell cell, float delay)
+    {
+        if (cell.HasRoot)
+            return;
+
+        GameObject new_root = GetFromPool();
+        new_root.transform.position = cell.Position;
+        new_root.GetComponent<Root>().Associated_cell = cell;
+        new_root.GetComponent<Root>().ApparitionTime = delay;
+        cell.HasRoot = true;
+        new_root.SetActive(true);
+    }
+
 }
