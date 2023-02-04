@@ -295,8 +295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rootPrefab: {fileID: 7594554259440157524, guid: 353cbad65003b0947bc43641ac674be8, type: 3}
-  _spawnMinDelay: 2.5
-  _spawnMaxDelay: 4.5
+  _spawnMinDelay: 3.5
+  _spawnMaxDelay: 6.5
   _ground: {fileID: 2137938772}
 --- !u!1 &1786233370
 GameObject:

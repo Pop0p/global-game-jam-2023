@@ -109,18 +109,6 @@ public class RootsManager : MonoBehaviour
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     float GetNewSpawnTime() => Random.Range(_spawnMinDelay, _spawnMaxDelay);
