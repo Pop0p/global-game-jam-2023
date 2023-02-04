@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 public class Deplacement : MonoBehaviour
 {
     public int Speed;
+    public int DashSpeed;
+    public float DashCooldown;
+    public float DashDuration;
+
     private Vector2 movement;
     private bool canDash;
     private bool canUse;
@@ -27,8 +31,9 @@ public class Deplacement : MonoBehaviour
 
         if (canDash && canUse)
         {
-            StartCoroutine(DashAction());
-            transform.Translate(new Vector3(movement.x, 0, movement.y) * Time.deltaTime * Speed * 2);
+            rb.AddForce(new Vector3(movement.x, 0, movement.y) * DashSpeed, ForceMode.Impulse);
+
+            canUse = false;
             StartCoroutine(CooldownDash());
             Debug.Log("dash");
         }
@@ -46,14 +51,7 @@ public class Deplacement : MonoBehaviour
 
     private IEnumerator CooldownDash()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(DashCooldown);
         canUse = true;
-    }
-
-    private IEnumerator DashAction()
-    {
-        canDash = true;
-        yield return new WaitForSeconds(0.7f);
-        canUse = false;
     }
 }
