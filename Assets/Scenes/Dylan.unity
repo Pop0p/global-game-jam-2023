@@ -294,9 +294,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc883a59712bbb44db2ea9db445a86a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rootPrefab: {fileID: 0}
-  _spawnRootRate: 0
-  _spawnRootRateRange: 1.97
+  _rootPrefab: {fileID: 7594554259440157524, guid: 353cbad65003b0947bc43641ac674be8, type: 3}
+  _spawnMinDelay: 2
+  _spawnMaxDelay: 4
+  _ground: {fileID: 2137938772}
 --- !u!1 &1786233370
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +309,7 @@ GameObject:
   - component: {fileID: 1786233373}
   - component: {fileID: 1786233372}
   - component: {fileID: 1786233371}
+  - component: {fileID: 1786233374}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -381,6 +383,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 70, y: 0, z: -0.35}
+--- !u!114 &1786233374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786233370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9118880f3ebce0646af2a59ef49ba960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0
+  shakeAmount: 0.025
 --- !u!1 &2137938770
 GameObject:
   m_ObjectHideFlags: 0
