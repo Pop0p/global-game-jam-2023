@@ -16,6 +16,7 @@ public class Deplacement : MonoBehaviour
     public bool IsDashing;
 
     private Rigidbody rb;
+    public GameObject TailDash;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,7 @@ public class Deplacement : MonoBehaviour
 
         if (canDash && canUse)
         {
+            TailDash.SetActive(true);
             rb.AddForce(new Vector3(movement.x, 0, movement.y) * DashSpeed, ForceMode.Impulse);
             canUse = false;
 
@@ -63,5 +65,6 @@ public class Deplacement : MonoBehaviour
         yield return new WaitForSeconds(DashDuration);
         IsDashing = false;
         rb.velocity = Vector3.zero;
+        TailDash.SetActive(false);
     }
 }
