@@ -8,7 +8,9 @@ public class Player : MonoBehaviour
 {
     public int PV;
     private Deplacement deplacement;
-    private bool invisibility;
+    private bool invisibilityDash;
+    private bool invisibilityTouch;
+    public float InvinsibiliteTouchCooldown;
     public Collider Collider_player;
 
     private int nb_object;
@@ -21,14 +23,15 @@ public class Player : MonoBehaviour
     void Start()
     {
         deplacement = GetComponent<Deplacement>();
-        invisibility = false;
+        invisibilityDash = false;
+        invisibilityTouch = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        invisibility = deplacement.IsDashing;
-        if (invisibility)
+        invisibilityDash = deplacement.IsDashing;
+        if (invisibilityDash || invisibilityTouch)
         {
             Collider_player.isTrigger = true;
         }
@@ -48,10 +51,11 @@ public class Player : MonoBehaviour
             TextObject.text = DebutTextObject + " " + nb_object;
         }
         // retirer pv si racine
-        if ((collision.gameObject.tag == "Roots") && !invisibility)
+        if ((collision.gameObject.tag == "Roots") && !invisibilityDash)
         {
-            Debug.Log("pass");
             deplacement.Back();
+            invisibilityTouch = true;
+            StartCoroutine(InvinsibiliteCooldown());
             LostPV(1);
         }
     }
@@ -79,5 +83,11 @@ public class Player : MonoBehaviour
             
             gameObject.SetActive(false);
         }
+    }
+
+    private IEnumerator InvinsibiliteCooldown()
+    {
+        yield return new WaitForSeconds(InvinsibiliteTouchCooldown);
+        invisibilityTouch = false;
     }
 }

@@ -677,11 +677,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PV: 0
+  InvinsibiliteTouchCooldown: 0
   Collider_player: {fileID: 4532161234489195911}
   TextObject: {fileID: 0}
   DebutTextObject: 
   LifesObject: {fileID: 3912688149425343973}
-  DieEffect: {fileID: 0}
+  DieEffect: {fileID: 3863506748262994238, guid: e935ed65177da914aa0d29bad96565ec, type: 3}
 --- !u!114 &4532161234489195907
 MonoBehaviour:
   m_ObjectHideFlags: 0
