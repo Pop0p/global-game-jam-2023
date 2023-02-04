@@ -19,13 +19,12 @@ public class Player : MonoBehaviour
     public GameObject LifesObject;
     public ParticleSystem DieEffect;
 
-    private MeshRenderer mesh;
+    public MeshRenderer Mesh;
 
     // Start is called before the first frame update
     void Start()
     {
         deplacement = GetComponent<Deplacement>();
-        mesh = GetComponent<MeshRenderer>();
         invisibilityDash = false;
         invisibilityTouch = false;
     }
@@ -46,6 +45,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Collision Enter !!");
         // si objet alors ramasser
         if (collision.gameObject.tag == "Object")
         {
@@ -95,17 +95,17 @@ public class Player : MonoBehaviour
 
     private IEnumerator Clignote()
     {
-        mesh.enabled = false;
+        Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+        Mesh.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = false;
+        Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+        Mesh.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = false;
+        Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+        Mesh.enabled = true;
 
         invisibilityTouch = false;
     }
