@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
     public void OnPlay()
     {
         // aller dans une scène
-        SceneManager.LoadScene("Dylan");
+        SceneManager.LoadScene("Jeu");
     }
 
     public void OnExit()
