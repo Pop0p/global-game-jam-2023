@@ -6,11 +6,17 @@ using UnityEngine.InputSystem;
 public class Deplacement : MonoBehaviour
 {
     public int Speed;
+    public int DashSpeed;
+    public float DashCooldown;
+    public float DashDuration;
+
     private Vector2 movement;
     private bool canDash;
     private bool canUse;
+    public bool IsDashing;
 
     private Rigidbody rb;
+    public GameObject TailDash;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +24,7 @@ public class Deplacement : MonoBehaviour
         movement = Vector2.zero;
         canUse = true;
         rb = GetComponent<Rigidbody>();
+        IsDashing = false;
     }
 
     // Update is called once per frame
@@ -27,10 +34,12 @@ public class Deplacement : MonoBehaviour
 
         if (canDash && canUse)
         {
-            StartCoroutine(DashAction());
-            transform.Translate(new Vector3(movement.x, 0, movement.y) * Time.deltaTime * Speed * 2);
+            TailDash.SetActive(true);
+            rb.AddForce(new Vector3(movement.x, 0, movement.y) * DashSpeed, ForceMode.Impulse);
+            canUse = false;
+
+            StartCoroutine(UseDash());
             StartCoroutine(CooldownDash());
-            Debug.Log("dash");
         }
     }
 
@@ -42,18 +51,20 @@ public class Deplacement : MonoBehaviour
     public void Dash(InputAction.CallbackContext context)
     {
         canDash = context.action.triggered;
+        IsDashing = true;
     }
 
     private IEnumerator CooldownDash()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(DashCooldown);
         canUse = true;
     }
 
-    private IEnumerator DashAction()
+    private IEnumerator UseDash()
     {
-        canDash = true;
-        yield return new WaitForSeconds(0.7f);
-        canUse = false;
+        yield return new WaitForSeconds(DashDuration);
+        IsDashing = false;
+        rb.velocity = Vector3.zero;
+        TailDash.SetActive(false);
     }
 }
