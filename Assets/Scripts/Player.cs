@@ -72,6 +72,10 @@ public class Player : MonoBehaviour
             other.gameObject.SetActive(false);
             nb_object++;
             TextObject.text = DebutTextObject + " " + nb_object;
+            if (nb_object == 6)
+            {
+                // Fin de la partie
+            }
         }
     }
 
