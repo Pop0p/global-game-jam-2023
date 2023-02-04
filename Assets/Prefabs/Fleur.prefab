@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7073035526255267180}
   - component: {fileID: 3771010319492988462}
   - component: {fileID: 1632245055}
+  - component: {fileID: 2650898890881202418}
   m_Layer: 0
   m_Name: Fleur
   m_TagString: Object
@@ -112,3 +113,16 @@ MonoBehaviour:
   degreesPerSecond: 15
   amplitude: 0.15
   frequency: 0.5
+--- !u!65 &2650898890881202418
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8730373176879901881}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3315219, y: 0.28858626, z: 0.3372328}
+  m_Center: {x: 0.001746431, y: -0.012833767, z: 0.00485003}
