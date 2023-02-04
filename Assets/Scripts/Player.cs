@@ -8,25 +8,30 @@ public class Player : MonoBehaviour
 {
     public int PV;
     private Deplacement deplacement;
-    private bool invisibility;
+    private bool invisibilityDash;
+    private bool invisibilityTouch;
+    public float InvinsibiliteTouchCooldown;
     public Collider Collider_player;
 
     private int nb_object;
     public TMP_Text TextObject;
     public string DebutTextObject;
+    public GameObject LifesObject;
+    public ParticleSystem DieEffect;
 
     // Start is called before the first frame update
     void Start()
     {
         deplacement = GetComponent<Deplacement>();
-        invisibility = false;
+        invisibilityDash = false;
+        invisibilityTouch = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        invisibility = deplacement.IsDashing;
-        if (invisibility)
+        invisibilityDash = deplacement.IsDashing;
+        if (invisibilityDash || invisibilityTouch)
         {
             Collider_player.isTrigger = true;
         }
@@ -46,8 +51,11 @@ public class Player : MonoBehaviour
             TextObject.text = DebutTextObject + " " + nb_object;
         }
         // retirer pv si racine
-        if ((collision.gameObject.tag == "Roots") && !invisibility)
+        if ((collision.gameObject.tag == "Roots") && !invisibilityDash)
         {
+            deplacement.Back();
+            invisibilityTouch = true;
+            StartCoroutine(InvinsibiliteCooldown());
             LostPV(1);
         }
     }
@@ -66,5 +74,20 @@ public class Player : MonoBehaviour
     public void LostPV(int pvLost)
     {
         PV -= pvLost;
+        Debug.Log(PV);
+        LifesObject.transform.GetChild(PV).GetChild(0).gameObject.SetActive(false);
+        if (PV == 0)
+        {
+            DieEffect.transform.position = transform.position;
+            DieEffect.gameObject.SetActive(true);
+            
+            gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator InvinsibiliteCooldown()
+    {
+        yield return new WaitForSeconds(InvinsibiliteTouchCooldown);
+        invisibilityTouch = false;
     }
 }

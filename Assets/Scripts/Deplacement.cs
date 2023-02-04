@@ -54,6 +54,19 @@ public class Deplacement : MonoBehaviour
         IsDashing = true;
     }
 
+    public void Back()
+    {
+        Debug.Log("back");
+        rb.AddRelativeForce(new Vector3(-movement.x, 0, -movement.y) * 2, ForceMode.Impulse);
+        StartCoroutine(StopBack());
+    }
+
+    private IEnumerator StopBack()
+    {
+        yield return new WaitForSeconds(0.5f);
+        rb.velocity = Vector3.zero;
+    }
+
     private IEnumerator CooldownDash()
     {
         yield return new WaitForSeconds(DashCooldown);
