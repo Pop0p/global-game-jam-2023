@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private int nb_object;
     public TMP_Text TextObject;
     public string DebutTextObject;
+    public GameObject LifesObject;
+    public ParticleSystem DieEffect;
 
     // Start is called before the first frame update
     void Start()
@@ -66,5 +68,14 @@ public class Player : MonoBehaviour
     public void LostPV(int pvLost)
     {
         PV -= pvLost;
+        Debug.Log(PV);
+        LifesObject.transform.GetChild(PV).GetChild(0).gameObject.SetActive(false);
+        if (PV == 0)
+        {
+            DieEffect.transform.position = transform.position;
+            DieEffect.gameObject.SetActive(true);
+            
+            gameObject.SetActive(false);
+        }
     }
 }
