@@ -50,6 +50,8 @@ public class Player : MonoBehaviour
         // retirer pv si racine
         if ((collision.gameObject.tag == "Roots") && !invisibility)
         {
+            Debug.Log("pass");
+            deplacement.Back();
             LostPV(1);
         }
     }
