@@ -46,6 +46,7 @@ public class Deplacement : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         movement = context.ReadValue<Vector2>();
+        Debug.Log(movement);
     }
 
     public void Dash(InputAction.CallbackContext context)
