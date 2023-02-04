@@ -1,8 +1,6 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Threading;
 using UnityEngine;
-
-
 
 public class Root : MonoBehaviour
 {
@@ -12,6 +10,7 @@ public class Root : MonoBehaviour
     private float _currentTime;
     private Vector3 _targetPosition;
     private Vector3 _startPosition;
+    private Quaternion _startRotation;
     private bool _isLerping;
 
     public bool IsPaused = true;
@@ -30,6 +29,7 @@ public class Root : MonoBehaviour
         _timeSinceGrown = 0;
         _time = 0;
         _growthDuration = .25f;
+        transform.rotation = Quaternion.identity;
     }
 
     void Update()
@@ -46,6 +46,8 @@ public class Root : MonoBehaviour
         _time += Time.deltaTime;
         if (_hasGrown)
             _timeSinceGrown += Time.deltaTime;
+
+
     }
 
 
@@ -56,14 +58,17 @@ public class Root : MonoBehaviour
 
         _isLerping = true;
         _startPosition = transform.position;
+        _startRotation = transform.rotation;
         _currentTime = 0;
         Camera.main.GetComponent<CameraShake>().ShakeTo(.01f, _growthDuration);
         _growthDuration *= 2;
-        _targetPosition = new Vector3(transform.position.x, transform.localScale.y, transform.position.z);
+        _targetPosition = new Vector3(transform.position.x, .5f, transform.position.z);
 
         while (true)
         {
             transform.position = Vector3.Lerp(_startPosition, _targetPosition, _currentTime / _growthDuration);
+            transform.rotation = Quaternion.Lerp(_startRotation, Quaternion.Euler(_startRotation.eulerAngles.x, 180f, _startRotation.eulerAngles.z), _currentTime / _growthDuration);
+            
             _currentTime += Time.deltaTime;
 
             if (_currentTime >= _growthDuration)

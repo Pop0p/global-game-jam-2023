@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 
 public class RootsManager : MonoBehaviour
 {
+    public static RootsManager Instance;
+
     [SerializeField] private GameObject _rootPrefab;
     [SerializeField] private float _spawnMinDelay;
     [SerializeField] private float _spawnMaxDelay;
@@ -22,6 +24,12 @@ public class RootsManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(Instance);
+
+
         Assert.IsNotNull(_rootPrefab, "the field _rootPrefab shouldn't be null !");
 
         _rootsPool = new List<GameObject>();
@@ -38,7 +46,7 @@ public class RootsManager : MonoBehaviour
         var length = _ground.bounds.size.z;
 
 
-        var cell_count = 11; // atm the root diameter is 0.45 and the ground width is 5 so... 5 / 0.45 == 11
+        var cell_count = 12;
         var cell_row_width = width / cell_count;
         var cell_row_length = length / cell_count;
 
@@ -141,7 +149,6 @@ public class RootsManager : MonoBehaviour
             }
         }
     }
-
     private void SpawnLine()
     {
         var center_x = Random.Range(0, _cells.GetLength(0));
@@ -204,6 +211,7 @@ public class RootsManager : MonoBehaviour
     }
     private void SpawnFull()
     {
+        Vector3 flower_pos = Vector3.one * -50;
         var safes = new List<Cell>();
         var size = Random.Range(2, 4);
         var center_x = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(0) - Mathf.FloorToInt(size / 2));
@@ -215,7 +223,9 @@ public class RootsManager : MonoBehaviour
             for (int z = 0; z < size; z++)
             {
                 var z_index = Mathf.FloorToInt(center_z - size / 2) + z;
-                safes.Add(_cells[x_index, z_index]);
+                if (flower_pos == Vector3.one * -50)
+                    flower_pos = _cells[x_index, z_index].Position;
+                    safes.Add(_cells[x_index, z_index]);
             }
         }
 
@@ -227,11 +237,24 @@ public class RootsManager : MonoBehaviour
 
             DoSpawnRoot(c, delay);
         }
+        flower_pos.y = 0.5f;
+        FlowerManager.Instance.DoSpawnFlower(flower_pos, .25f);
+
 
     }
 
 
+    public Vector3 GetFlowerPosition()
+    {
+        var center_x = Random.Range(1, _cells.GetLength(0));
+        var center_z = Random.Range(1, _cells.GetLength(1));
+        var pos = _cells[center_x, center_z].Position;
 
+        pos.y = 0.25f;
+
+        return pos;
+
+    }
     private void DoSpawnRoot(Cell cell, float delay)
     {
         if (cell.HasRoot)
