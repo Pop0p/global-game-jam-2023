@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 6f6d11c60b6902844aef91c8c81de07e
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Honey Mushroom
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5e9316c7c3ceb1546afef93bc0ac1c67, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
