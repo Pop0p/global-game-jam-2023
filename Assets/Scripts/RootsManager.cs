@@ -163,6 +163,7 @@ public class RootsManager : MonoBehaviour
 
     private void SpawnSquare()
     {
+        bool with_different_delay = Random.Range(0, 2) == 0;
         var size = Random.Range(2, 5);
         var center_x = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(0) - Mathf.FloorToInt(size / 2));
         var center_z = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(1) - Mathf.FloorToInt(size / 2));
@@ -172,7 +173,7 @@ public class RootsManager : MonoBehaviour
             for (int z = 0; z < size; z++)
             {
                 var z_index = Mathf.FloorToInt(center_z - size / 2) + z;
-                DoSpawnRoot(_cells[x_index, z_index], 0.25f);
+                DoSpawnRoot(_cells[x_index, z_index], with_different_delay ? Random.Range(0.35f, 0.65f) : 0.35f, !with_different_delay);
             }
         }
     }
@@ -195,13 +196,15 @@ public class RootsManager : MonoBehaviour
     }
     private void SpawnMultipleRandoms()
     {
+        int i = 0;
         bool with_different_delay = Random.Range(0, 2) == 0;
         for (int x = 0; x < _cells.GetLength(0); x++)
         {
             for (int z = 0; z < _cells.GetLength(1); z++)
             {
                 if (Random.Range(0, 4) == 0)
-                    DoSpawnRoot(_cells[x, z], with_different_delay ? Random.Range(0.1f, 015f) : 0.15f);
+                    DoSpawnRoot(_cells[x, z], with_different_delay ? 0.35f + (0.15f * i) : 0.35f, !with_different_delay);
+                i += 1;
             }
         }
     }
