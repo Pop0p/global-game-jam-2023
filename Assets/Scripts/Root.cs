@@ -22,6 +22,10 @@ public class Root : MonoBehaviour
     private bool _hasGrown = false;
     private float _time;
 
+
+    public bool Alone;
+    public bool SameTime;
+
     public Cell Associated_cell;
 
     private AudioSource _audioSource;
@@ -68,13 +72,14 @@ public class Root : MonoBehaviour
 
     }
 
-    public void Setup(Cell c, float delay)
+    public void Setup(Cell c, float delay, bool alone)
     {
         Associated_cell = c;
         ApparitionTime = delay;
         transform.position = c.Position;
         var pos = transform.GetComponent<Renderer>().bounds.center;
         pos.y = 0.05f;
+        Alone = alone;
         RootWarningParent.transform.position = pos;
         _rootWarning.LETSGONG_DURATION = delay;
         StartCoroutine(_rootWarning.LETSGONGGGGG());
@@ -85,7 +90,8 @@ public class Root : MonoBehaviour
         if (_isLerping)
             yield break;
 
-        _audioSource.Play();
+        if (Alone)
+            _audioSource.Play();
         RootWarningParent.SetActive(false);
         _isLerping = true;
         _startPosition = transform.position;

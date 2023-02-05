@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -20,12 +22,14 @@ public class Player : MonoBehaviour
     public ParticleSystem DieEffect;
 
     private Rigidbody _rb;
-    public MeshRenderer Mesh;
+    public MeshRenderer[] Mesh;
 
     public GameObject Tuto;
 
     public bool IsGoingToVictory;
     public bool GOTOVICTORY;
+
+    public bool IsPaused;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +43,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsPaused)
+            return;
         if ((deplacement.IsDashing || deplacement.movement != Vector2.zero) && Tuto.activeInHierarchy)
         {
             Tuto.SetActive(false);
@@ -67,8 +73,40 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene("MenuFin");
         }
 
+
     }
 
+    public void ONRESUME()
+    {
+        transform.GetComponent<PlayerInput>().enabled = true;
+        var obj = GameObject.Find("UI").gameObject.transform.Find("Option Menu").gameObject;
+        obj.SetActive(!obj.activeInHierarchy);
+        RootsManager.Instance.IsPlaying = !obj.activeInHierarchy;
+        FlowerManager.Instance.IsPlaying = !obj.activeInHierarchy;
+        IsPaused = obj.activeInHierarchy;
+        deplacement.IsPaused = IsPaused;
+    }
+    public void ONRESTARTSAMERE()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void ONQUITTE()
+    {
+        SceneManager.LoadScene("MenuDebut");
+    }
+    public void OnESCAPE(InputAction.CallbackContext context)
+    {
+        if (!transform.GetComponent<PlayerInput>().isActiveAndEnabled)
+            return;
+        transform.GetComponent<PlayerInput>().enabled = false;
+        var obj = GameObject.Find("UI").gameObject.transform.Find("Option Menu").gameObject;
+        obj.SetActive(!obj.activeInHierarchy);
+        RootsManager.Instance.IsPlaying = !obj.activeInHierarchy;
+        FlowerManager.Instance.IsPlaying = !obj.activeInHierarchy;
+        IsPaused = obj.activeInHierarchy;
+        deplacement.IsPaused = IsPaused;
+
+    }
     private void OnCollisionEnter(Collision collision)
     {
         // si objet alors ramasser
@@ -80,7 +118,11 @@ public class Player : MonoBehaviour
             AudioManager.Instance.ChangeSound("flower " + nb_object);
             if (nb_object == 6)
             {
+                Debug.Log("IcI EN FAIT !!!!!!!!!!!!!");
                 AudioManager.Instance.ChangeSound("victory");
+                StartCoroutine(SAMEREEEEEEEEEEEEEEEEE());
+                RootsManager.Instance.IsPlaying = false;
+                FlowerManager.Instance.IsPlaying = false;
                 // Fin de la partie
             }
         }
@@ -105,13 +147,13 @@ public class Player : MonoBehaviour
             TextObject.text = nb_object.ToString();
 
             AudioManager.Instance.ChangeSound("flower " + nb_object);
-            if (nb_object == 1)
+            if (nb_object == 6)
             {
                 Debug.Log("IcI EN FAIT !!!!!!!!!!!!!");
                 AudioManager.Instance.ChangeSound("victory");
                 StartCoroutine(SAMEREEEEEEEEEEEEEEEEE());
-                RootsManager.Instance.IsPlaying= false;
-                FlowerManager.Instance.IsPlaying= false;
+                RootsManager.Instance.IsPlaying = false;
+                FlowerManager.Instance.IsPlaying = false;
             }
         }
     }
@@ -126,6 +168,10 @@ public class Player : MonoBehaviour
             DieEffect.gameObject.SetActive(true);
             gameObject.SetActive(false);
             AudioManager.Instance.ChangeSound("death");
+
+            transform.GetComponent<PlayerInput>().enabled = false;
+            var obj = GameObject.Find("UI").gameObject.transform.Find("Defeat Menu").gameObject;
+            obj.SetActive(!obj.activeInHierarchy);
         }
     }
 
@@ -133,9 +179,11 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < 7; i++)
         {
-            Mesh.enabled = false;
+            Mesh[0].enabled = false;
+            Mesh[1].enabled = false;
             yield return new WaitForSeconds(0.1f);
-            Mesh.enabled = true;
+            Mesh[0].enabled = true;
+            Mesh[1].enabled = true;
             yield return new WaitForSeconds(0.1f);
         }
 

@@ -22,6 +22,8 @@ public class RootsManager : MonoBehaviour
     public bool isCollisionDisabled;
     public bool IsPlaying = false;
 
+    private AudioSource _audioSource;
+    public AudioClip ClipSameTime;
 
 
 
@@ -33,7 +35,11 @@ public class RootsManager : MonoBehaviour
             Destroy(Instance);
 
 
+
         Assert.IsNotNull(_rootPrefab, "the field _rootPrefab shouldn't be null !");
+
+        if (_audioSource == null)
+            _audioSource = GetComponent<AudioSource>();
 
         _rootsPool = new List<GameObject>();
         _rootsPoolRB = new List<CapsuleCollider>();
@@ -157,7 +163,6 @@ public class RootsManager : MonoBehaviour
 
     private void SpawnSquare()
     {
-        var cells = new List<Cell>();
         var size = Random.Range(2, 5);
         var center_x = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(0) - Mathf.FloorToInt(size / 2));
         var center_z = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(1) - Mathf.FloorToInt(size / 2));
@@ -167,7 +172,7 @@ public class RootsManager : MonoBehaviour
             for (int z = 0; z < size; z++)
             {
                 var z_index = Mathf.FloorToInt(center_z - size / 2) + z;
-                cells.Add(_cells[x_index, z_index]);
+                DoSpawnRoot(_cells[x_index, z_index], 0.25f);
             }
         }
     }
@@ -247,17 +252,24 @@ public class RootsManager : MonoBehaviour
                 var z_index = Mathf.FloorToInt(center_z - size / 2) + z;
                 if (flower_pos == Vector3.one * -50)
                     flower_pos = _cells[x_index, z_index].Position;
-                    safes.Add(_cells[x_index, z_index]);
+                safes.Add(_cells[x_index, z_index]);
             }
         }
 
         var delay = Random.Range(0.25f, 0.50f);
+        bool gg = false;
         foreach (Cell c in _cells)
         {
             if (safes.Contains(c))
                 continue;
 
-            DoSpawnRoot(c, delay);
+            if (!gg)
+            {
+                DoSpawnRoot(c, delay, true);
+                gg = true;
+            }
+            else
+                DoSpawnRoot(c, delay);
         }
         flower_pos.y = 0.5f;
         FlowerManager.Instance.DoSpawnFlower(flower_pos, .25f);
@@ -275,15 +287,25 @@ public class RootsManager : MonoBehaviour
         return pos;
 
     }
-    private void DoSpawnRoot(Cell cell, float delay)
+    private void DoSpawnRoot(Cell cell, float delay, bool same_time_full = false)
     {
         if (cell.HasRoot)
             return;
 
         GameObject new_root = GetFromPool();
         new_root.SetActive(true);
-        new_root.transform.Find("THERACINE").GetComponent<Root>().Setup(cell, delay + .25f);
+        new_root.transform.Find("THERACINE").GetComponent<Root>().Setup(cell, delay + .25f, same_time_full);
         cell.HasRoot = true;
+
+        if (same_time_full)
+            StartCoroutine(JOUELESON(delay + .25f));
+    }
+
+    IEnumerator JOUELESON(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _audioSource.clip = ClipSameTime;
+        _audioSource.Play();
     }
 
 }

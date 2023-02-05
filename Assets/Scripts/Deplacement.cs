@@ -18,6 +18,8 @@ public class Deplacement : MonoBehaviour
     private Rigidbody rb;
     public GameObject TailDash;
 
+    public bool IsPaused;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,8 @@ public class Deplacement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsPaused)
+            return;
         transform.Translate(new Vector3(movement.x, 0, movement.y) * Time.deltaTime * Speed);
 
         if (canDash && canUse)
@@ -46,16 +50,22 @@ public class Deplacement : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (IsPaused)
+            return;
         movement = context.ReadValue<Vector2>();
     }
 
     public void Dash(InputAction.CallbackContext context)
     {
+        if (IsPaused)
+            return;
         canDash = context.action.triggered;
     }
 
     public void Back()
     {
+        if (IsPaused)
+            return;
         if (movement == Vector2.zero)
         {
             rb.AddRelativeForce(new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 3, ForceMode.Impulse);
