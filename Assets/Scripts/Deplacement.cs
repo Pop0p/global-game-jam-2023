@@ -20,6 +20,8 @@ public class Deplacement : MonoBehaviour
 
     public bool IsPaused;
 
+    [SerializeField] private AudioClip[] _clipDash;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +47,11 @@ public class Deplacement : MonoBehaviour
 
             StartCoroutine(UseDash());
             StartCoroutine(CooldownDash());
+
+            GetComponent<AudioSource>().PlayOneShot(_clipDash[Random.Range(0, _clipDash.Length)]);
         }
     }
+
 
     public void OnMove(InputAction.CallbackContext context)
     {

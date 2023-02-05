@@ -31,11 +31,17 @@ public class Player : MonoBehaviour
 
     public bool IsPaused;
 
+    private AudioSource _source;
+    [SerializeField] private AudioClip[] _clipHurts;
+    [SerializeField] private AudioClip[] _clipFlower;
+
+
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         deplacement = GetComponent<Deplacement>();
+        _source = GetComponent<AudioSource>();
         invisibilityDash = false;
         invisibilityTouch = false;
     }
@@ -155,6 +161,7 @@ public class Player : MonoBehaviour
                 RootsManager.Instance.IsPlaying = false;
                 FlowerManager.Instance.IsPlaying = false;
             }
+            _source.PlayOneShot(_clipFlower[Random.Range(0, _clipFlower.Length)]);
         }
     }
 
@@ -173,11 +180,12 @@ public class Player : MonoBehaviour
             var obj = GameObject.Find("UI").gameObject.transform.Find("Defeat Menu").gameObject;
             obj.SetActive(!obj.activeInHierarchy);
         }
+        _source.PlayOneShot(_clipHurts[Random.Range(0, _clipHurts.Length)]);
     }
 
     private IEnumerator Clignote()
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 8; i++)
         {
             Mesh[0].enabled = false;
             Mesh[1].enabled = false;

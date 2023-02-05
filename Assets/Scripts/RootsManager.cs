@@ -132,23 +132,23 @@ public class RootsManager : MonoBehaviour
         {
             SpawnFull();
         }
-        // Square 20%
-        else if (r <= 0.25)
+        // Square 15%
+        else if (r <= 0.20)
         {
             SpawnSquare();
         }
-        // Line 25 %
-        else if (r <= 0.50)
+        // Line 20 %
+        else if (r <= 0.40)
         {
             SpawnLine();
         }
-        // cross 20 %
-        else if (r <= 0.70)
+        // cross 15 %
+        else if (r <= 0.55)
         {
             SpawnCross();
 
         }
-        // grid 10 %
+        // grid 25 %
         else if (r <= 0.80)
         {
             SpawnMultipleRandoms();
@@ -256,7 +256,7 @@ public class RootsManager : MonoBehaviour
             }
         }
 
-        var delay = Random.Range(0.25f, 0.50f);
+        var delay = Random.Range(0.35f, 0.60f);
         bool gg = false;
         foreach (Cell c in _cells)
         {
@@ -294,7 +294,7 @@ public class RootsManager : MonoBehaviour
 
         GameObject new_root = GetFromPool();
         new_root.SetActive(true);
-        new_root.transform.Find("THERACINE").GetComponent<Root>().Setup(cell, delay + .25f, same_time_full);
+        new_root.transform.Find("THERACINE").GetComponent<Root>().Setup(cell, delay + .25f, !same_time_full);
         cell.HasRoot = true;
 
         if (same_time_full)
