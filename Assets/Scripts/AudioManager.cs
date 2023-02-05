@@ -33,31 +33,36 @@ public class AudioManager : MonoBehaviour
 
     public void ChangeSound(string moment)
     {
+        Debug.Log(moment);
         switch (moment)
         {
             case "flower 1":
                 AudioSources[0].clip = Voices[0];
+                AudioSources[0].Play();
                 break;
             case "flower 2":
                 AudioSources[0].clip = Voices[2];
+                AudioSources[0].Play();
                 break;
             case "flower 3":
                 AudioSources[0].clip = Voices[3];
-                break;
-            case "flower 5":
-                AudioSources[0].clip = Voices[4];
+                AudioSources[0].Play();
                 break;
             case "victory":
                 AudioSources[1].clip = Musics[1];
+                AudioSources[1].Play();
                 break;
             case "death":
                 AudioSources[1].clip = Musics[2];
+                AudioSources[1].Play();
                 break;
             case "begin": // après lecture du tuto
                 AudioSources[1].clip = Musics[0];
+                AudioSources[1].Play();
                 break;
             default:
                 break;
         }
+        
     }
 }

@@ -17,7 +17,10 @@ public class RootsManager : MonoBehaviour
 
     private float _spawnTime;
     private List<GameObject> _rootsPool;
+    private List<CapsuleCollider> _rootsPoolRB;
     public Cell[,] _cells;
+    public bool isCollisionDisabled;
+    public bool IsPlaying = false;
 
 
 
@@ -33,11 +36,13 @@ public class RootsManager : MonoBehaviour
         Assert.IsNotNull(_rootPrefab, "the field _rootPrefab shouldn't be null !");
 
         _rootsPool = new List<GameObject>();
-        for (int i = 0; i < 10; i++)
+        _rootsPoolRB = new List<CapsuleCollider>();
+        for (int i = 0; i < 50; i++)
         {
             var obj = Instantiate(_rootPrefab);
             obj.transform.parent = transform;
             _rootsPool.Add(obj);
+            _rootsPoolRB.Add(obj.transform.Find("THERACINE").GetComponent<CapsuleCollider>());
         }
 
         _spawnTime = GetNewSpawnTime();
@@ -68,6 +73,8 @@ public class RootsManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsPlaying)
+            return;
 
         if (_spawnTime < 0)
         {
@@ -92,10 +99,25 @@ public class RootsManager : MonoBehaviour
         var obj = Instantiate(_rootPrefab);
         obj.transform.parent = transform;
         _rootsPool.Add(obj);
+        _rootsPoolRB.Add(obj.transform.Find("THERACINE").GetComponent<CapsuleCollider>());
 
         return obj;
     }
 
+    public void DisableCollisions()
+    {
+        for (int i = 0; i < _rootsPoolRB.Count; i++)
+            _rootsPoolRB[i].isTrigger = true;
+
+        isCollisionDisabled = true;
+    }
+    public void EnableCollisions()
+    {
+        for (int i = 0; i < _rootsPool.Count; i++)
+            _rootsPoolRB[i].isTrigger = false;
+
+        isCollisionDisabled = false;
+    }
     void DoAttack()
     {
         var r = Random.Range(0f, 1f);
@@ -174,7 +196,7 @@ public class RootsManager : MonoBehaviour
             for (int z = 0; z < _cells.GetLength(1); z++)
             {
                 if (Random.Range(0, 4) == 0)
-                    DoSpawnRoot(_cells[x, z], with_different_delay ? Random.Range(0.1f, 035f) : 0.15f);
+                    DoSpawnRoot(_cells[x, z], with_different_delay ? Random.Range(0.1f, 015f) : 0.15f);
             }
         }
     }
@@ -261,11 +283,9 @@ public class RootsManager : MonoBehaviour
             return;
 
         GameObject new_root = GetFromPool();
-        new_root.transform.position = cell.Position;
-        new_root.GetComponent<Root>().Associated_cell = cell;
-        new_root.GetComponent<Root>().ApparitionTime = delay;
-        cell.HasRoot = true;
         new_root.SetActive(true);
+        new_root.transform.Find("THERACINE").GetComponent<Root>().Setup(cell, delay + .25f);
+        cell.HasRoot = true;
     }
 
 }

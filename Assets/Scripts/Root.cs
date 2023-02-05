@@ -10,6 +10,7 @@ public class Root : MonoBehaviour
     private float _currentTime;
     private Vector3 _targetPosition;
     private Vector3 _startPosition;
+    private float _targetRotation;
     private Quaternion _startRotation;
     private bool _isLerping;
 
@@ -23,6 +24,19 @@ public class Root : MonoBehaviour
 
     public Cell Associated_cell;
 
+    private AudioSource _audioSource;
+
+
+    public GameObject RootWarningParent;
+    private RootWarning _rootWarning;
+
+    private void Awake()
+    {
+        if (_rootWarning == null)
+            _rootWarning = RootWarningParent.transform.Find("Growth").GetComponent<RootWarning>();
+        if (_audioSource == null)
+            _audioSource = GetComponent<AudioSource>();
+    }
     private void OnEnable()
     {
         IsPaused = true;
@@ -30,6 +44,9 @@ public class Root : MonoBehaviour
         _time = 0;
         _growthDuration = .25f;
         transform.rotation = Quaternion.identity;
+        _rootWarning.transform.localScale = new Vector3(0.1f, 1, 0.1f);
+        RootWarningParent.SetActive(true);
+
     }
 
     void Update()
@@ -43,6 +60,7 @@ public class Root : MonoBehaviour
             StartCoroutine(DoShrink());
         }
 
+
         _time += Time.deltaTime;
         if (_hasGrown)
             _timeSinceGrown += Time.deltaTime;
@@ -50,15 +68,29 @@ public class Root : MonoBehaviour
 
     }
 
+    public void Setup(Cell c, float delay)
+    {
+        Associated_cell = c;
+        ApparitionTime = delay;
+        transform.position = c.Position;
+        var pos = transform.GetComponent<Renderer>().bounds.center;
+        pos.y = 0.05f;
+        RootWarningParent.transform.position = pos;
+        _rootWarning.LETSGONG_DURATION = delay;
+        StartCoroutine(_rootWarning.LETSGONGGGGG());
+    }
 
     IEnumerator DoGrow()
     {
         if (_isLerping)
             yield break;
 
+        _audioSource.Play();
+        RootWarningParent.SetActive(false);
         _isLerping = true;
         _startPosition = transform.position;
         _startRotation = transform.rotation;
+        _targetRotation = Random.Range(0, 360f);
         _currentTime = 0;
         Camera.main.GetComponent<CameraShake>().ShakeTo(.01f, _growthDuration);
         _growthDuration *= 2;
@@ -67,8 +99,8 @@ public class Root : MonoBehaviour
         while (true)
         {
             transform.position = Vector3.Lerp(_startPosition, _targetPosition, _currentTime / _growthDuration);
-            transform.rotation = Quaternion.Lerp(_startRotation, Quaternion.Euler(_startRotation.eulerAngles.x, 180f, _startRotation.eulerAngles.z), _currentTime / _growthDuration);
-            
+            transform.rotation = Quaternion.Lerp(_startRotation, Quaternion.Euler(_startRotation.eulerAngles.x, _targetRotation, _startRotation.eulerAngles.z), _currentTime / _growthDuration);
+
             _currentTime += Time.deltaTime;
 
             if (_currentTime >= _growthDuration)

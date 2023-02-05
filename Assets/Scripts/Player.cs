@@ -18,36 +18,42 @@ public class Player : MonoBehaviour
     public GameObject LifesObject;
     public ParticleSystem DieEffect;
 
+    private Rigidbody _rb;
     public MeshRenderer Mesh;
 
     public GameObject Tuto;
-    private bool first;
 
     // Start is called before the first frame update
     void Start()
     {
+        _rb = GetComponent<Rigidbody>();
         deplacement = GetComponent<Deplacement>();
         invisibilityDash = false;
         invisibilityTouch = false;
-        first = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (first && Input.anyKey)
+        if ((deplacement.IsDashing || deplacement.movement != Vector2.zero) && Tuto.activeInHierarchy)
         {
             Tuto.SetActive(false);
             AudioManager.Instance.ChangeSound("begin");
+            RootsManager.Instance.IsPlaying = true;
+            FlowerManager.Instance.IsPlaying = true;
         }
 
         invisibilityDash = deplacement.IsDashing;
         if (invisibilityDash || invisibilityTouch)
         {
+            if (!RootsManager.Instance.isCollisionDisabled)
+                RootsManager.Instance.DisableCollisions();
             Collider_player.isTrigger = true;
         }
         else
         {
+            if (RootsManager.Instance.isCollisionDisabled)
+                RootsManager.Instance.EnableCollisions();
             Collider_player.isTrigger = false;
         }
     }
@@ -99,35 +105,27 @@ public class Player : MonoBehaviour
     public void LostPV(int pvLost)
     {
         PV -= pvLost;
-        Debug.Log(PV);
         LifesObject.transform.GetChild(PV).GetChild(0).gameObject.SetActive(false);
         if (PV <= 0)
         {
             DieEffect.transform.position = transform.position;
             DieEffect.gameObject.SetActive(true);
-            
             gameObject.SetActive(false);
+            AudioManager.Instance.ChangeSound("death");
         }
     }
 
     private IEnumerator Clignote()
     {
-        Mesh.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = false;
-        yield return new WaitForSeconds(0.1f);
-        Mesh.enabled = true;
+        for (int i = 0; i < 7; i++)
+        {
+            Mesh.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            Mesh.enabled = true;
+            yield return new WaitForSeconds(0.1f);
+        }
 
+        yield return new WaitForSeconds(0.25f);
         invisibilityTouch = false;
     }
 }

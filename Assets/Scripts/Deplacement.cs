@@ -10,7 +10,7 @@ public class Deplacement : MonoBehaviour
     public float DashCooldown;
     public float DashDuration;
 
-    private Vector2 movement;
+    public Vector2 movement;
     private bool canDash;
     private bool canUse;
     public bool IsDashing;
@@ -34,6 +34,7 @@ public class Deplacement : MonoBehaviour
 
         if (canDash && canUse)
         {
+            IsDashing = true;
             TailDash.SetActive(true);
             rb.AddForce(new Vector3(movement.x, 0, movement.y) * DashSpeed, ForceMode.Impulse);
             canUse = false;
@@ -51,7 +52,6 @@ public class Deplacement : MonoBehaviour
     public void Dash(InputAction.CallbackContext context)
     {
         canDash = context.action.triggered;
-        IsDashing = true;
     }
 
     public void Back()

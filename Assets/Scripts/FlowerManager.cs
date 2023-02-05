@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class FlowerManager : MonoBehaviour
 {
-    public static  FlowerManager Instance;
+    public static FlowerManager Instance;
     public int FlowerCountToWin = 6;
     public float DelayToSpawnFlower = 20;
     [SerializeField] private GameObject _flowerPrefab;
     private List<Flower> _currentFlowers;
     private float _timeSinceLastSpawn = 0;
+
+    public bool IsPlaying = false;
+
 
     private void Awake()
     {
@@ -25,12 +28,14 @@ public class FlowerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsPlaying)
+            return;
         if (_timeSinceLastSpawn > DelayToSpawnFlower)
         {
             DoSpawnFlower(RootsManager.Instance.GetFlowerPosition(), 1);
@@ -42,6 +47,8 @@ public class FlowerManager : MonoBehaviour
 
     public void DoSpawnFlower(Vector3 pos, float delay)
     {
+        if (_currentFlowers.Count == 6)
+            return;
         IEnumerator doSpawn()
         {
             yield return new WaitForSeconds(delay);
