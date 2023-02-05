@@ -45,7 +45,6 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision Enter !!");
         // si objet alors ramasser
         if (collision.gameObject.tag == "Object")
         {
@@ -86,10 +85,8 @@ public class Player : MonoBehaviour
         LifesObject.transform.GetChild(PV).GetChild(0).gameObject.SetActive(false);
         if (PV <= 0)
         {
-            Debug.Log("die");
             DieEffect.transform.position = transform.position;
             DieEffect.gameObject.SetActive(true);
-            Debug.Log("effect");
             
             gameObject.SetActive(false);
         }
