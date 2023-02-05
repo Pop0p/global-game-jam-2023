@@ -56,8 +56,14 @@ public class Deplacement : MonoBehaviour
 
     public void Back()
     {
-        Debug.Log("back");
-        rb.AddRelativeForce(new Vector3(-movement.x, 0, -movement.y) * 2, ForceMode.Impulse);
+        if (movement == Vector2.zero)
+        {
+            rb.AddRelativeForce(new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1)) * 3, ForceMode.Impulse);
+        }
+        else
+        {
+            rb.AddRelativeForce(new Vector3(-movement.x, 0, -movement.y) * 3, ForceMode.Impulse);
+        }
         StartCoroutine(StopBack());
     }
 

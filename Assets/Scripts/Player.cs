@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public GameObject LifesObject;
     public ParticleSystem DieEffect;
 
-    private MeshRenderer mesh;
+    public MeshRenderer Mesh;
 
     public GameObject Tuto;
     private bool first;
@@ -27,7 +27,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         deplacement = GetComponent<Deplacement>();
-        mesh = GetComponent<MeshRenderer>();
         invisibilityDash = false;
         invisibilityTouch = false;
         first = true;
@@ -69,10 +68,10 @@ public class Player : MonoBehaviour
             }
         }
         // retirer pv si racine
-        if ((collision.gameObject.tag == "Roots") && !invisibilityDash)
+        if ((collision.gameObject.tag == "Roots") && !invisibilityDash && !invisibilityTouch)
         {
-            deplacement.Back();
             invisibilityTouch = true;
+            deplacement.Back();
 
             StartCoroutine(Clignote());
             LostPV(1);
@@ -102,7 +101,7 @@ public class Player : MonoBehaviour
         PV -= pvLost;
         Debug.Log(PV);
         LifesObject.transform.GetChild(PV).GetChild(0).gameObject.SetActive(false);
-        if (PV == 0)
+        if (PV <= 0)
         {
             DieEffect.transform.position = transform.position;
             DieEffect.gameObject.SetActive(true);
@@ -113,17 +112,21 @@ public class Player : MonoBehaviour
 
     private IEnumerator Clignote()
     {
-        mesh.enabled = false;
+        Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+        Mesh.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = false;
+        Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+        Mesh.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = false;
+        Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
-        mesh.enabled = true;
+        Mesh.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+        Mesh.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        Mesh.enabled = true;
 
         invisibilityTouch = false;
     }
