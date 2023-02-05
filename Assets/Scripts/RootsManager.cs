@@ -235,7 +235,7 @@ public class RootsManager : MonoBehaviour
     {
         Vector3 flower_pos = Vector3.one * -50;
         var safes = new List<Cell>();
-        var size = Random.Range(2, 4);
+        var size = Random.Range(2, 5);
         var center_x = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(0) - Mathf.FloorToInt(size / 2));
         var center_z = Random.Range(Mathf.FloorToInt(size / 2), _cells.GetLength(1) - Mathf.FloorToInt(size / 2));
 
@@ -261,8 +261,6 @@ public class RootsManager : MonoBehaviour
         }
         flower_pos.y = 0.5f;
         FlowerManager.Instance.DoSpawnFlower(flower_pos, .25f);
-
-
     }
 
 

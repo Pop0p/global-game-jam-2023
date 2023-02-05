@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class Player : MonoBehaviour
     public MeshRenderer Mesh;
 
     public GameObject Tuto;
+
+    public bool IsGoingToVictory;
+    public bool GOTOVICTORY;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +60,13 @@ public class Player : MonoBehaviour
                 RootsManager.Instance.EnableCollisions();
             Collider_player.isTrigger = false;
         }
+
+        if (GOTOVICTORY && !IsGoingToVictory)
+        {
+            IsGoingToVictory = true;
+            SceneManager.LoadScene("MenuFin");
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -94,10 +105,13 @@ public class Player : MonoBehaviour
             TextObject.text = nb_object.ToString();
 
             AudioManager.Instance.ChangeSound("flower " + nb_object);
-            if (nb_object == 6)
+            if (nb_object == 1)
             {
+                Debug.Log("IcI EN FAIT !!!!!!!!!!!!!");
                 AudioManager.Instance.ChangeSound("victory");
-                // Fin de la partie
+                StartCoroutine(SAMEREEEEEEEEEEEEEEEEE());
+                RootsManager.Instance.IsPlaying= false;
+                FlowerManager.Instance.IsPlaying= false;
             }
         }
     }
@@ -127,5 +141,11 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(0.25f);
         invisibilityTouch = false;
+    }
+
+    IEnumerator SAMEREEEEEEEEEEEEEEEEE()
+    {
+        yield return new WaitForSeconds(1.5f);
+        GOTOVICTORY = true;
     }
 }
