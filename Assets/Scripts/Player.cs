@@ -56,8 +56,8 @@ public class Player : MonoBehaviour
         // retirer pv si racine
         if ((collision.gameObject.tag == "Roots") && !invisibilityDash)
         {
-            deplacement.Back();
             invisibilityTouch = true;
+            deplacement.Back();
 
             StartCoroutine(Clignote());
             LostPV(1);
@@ -95,6 +95,10 @@ public class Player : MonoBehaviour
 
     private IEnumerator Clignote()
     {
+        Mesh.enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        Mesh.enabled = true;
+        yield return new WaitForSeconds(0.1f);
         Mesh.enabled = false;
         yield return new WaitForSeconds(0.1f);
         Mesh.enabled = true;
