@@ -583,6 +583,7 @@ GameObject:
   - component: {fileID: 7550168860590393487}
   - component: {fileID: 2829932938928189376}
   - component: {fileID: 706002306659849192}
+  - component: {fileID: 7530368039248575678}
   m_Layer: 0
   m_Name: tete
   m_TagString: Untagged
@@ -657,6 +658,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &7530368039248575678
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4681277075272162372}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 40d15ddc7a6d16f49bb0fb246576b72a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &4984147895070521462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,6 +1260,7 @@ GameObject:
   - component: {fileID: 793441376035551768}
   - component: {fileID: 1088767658187757426}
   - component: {fileID: 8413278206909482918}
+  - component: {fileID: 4815216962557461016}
   m_Layer: 0
   m_Name: pied
   m_TagString: Untagged
@@ -1311,6 +1333,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &4815216962557461016
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7571218759918592126}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c541010b4d138c24e8295d710763e702, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &8298398308944744522
 GameObject:
   m_ObjectHideFlags: 0
