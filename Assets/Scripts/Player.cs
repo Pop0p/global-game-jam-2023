@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
             TextObject.text = DebutTextObject + " " + nb_object;
         }
         // retirer pv si racine
-        if ((collision.gameObject.tag == "Roots") && !invisibilityDash)
+        if ((collision.gameObject.tag == "Roots") && !invisibilityDash && !invisibilityTouch)
         {
             invisibilityTouch = true;
             deplacement.Back();
@@ -84,10 +84,12 @@ public class Player : MonoBehaviour
         PV -= pvLost;
         Debug.Log(PV);
         LifesObject.transform.GetChild(PV).GetChild(0).gameObject.SetActive(false);
-        if (PV == 0)
+        if (PV <= 0)
         {
+            Debug.Log("die");
             DieEffect.transform.position = transform.position;
             DieEffect.gameObject.SetActive(true);
+            Debug.Log("effect");
             
             gameObject.SetActive(false);
         }
